@@ -24,7 +24,7 @@ new class extends Component {
     {
         return \App\Models\Project::query()
             ->tap(fn ($query) => $this->sortBy ? $query->orderBy($this->sortBy, $this->sortDirection) : $query)
-            ->paginate(5);
+            ->paginate(25);
     }
 }; ?>
 
