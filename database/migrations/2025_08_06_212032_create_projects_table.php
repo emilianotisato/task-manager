@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('color')->default('zinc');
             $table->boolean('enabled')->default(true);
             $table->timestamps();
             $table->softDeletes();

@@ -42,7 +42,7 @@ new class extends Component {
         @foreach ($this->projects as $project)
             <flux:table.row :key="$project->id">
                 <flux:table.cell class="flex items-center gap-3">
-                    {{ strtoupper($project->name) }}
+                    <flux:badge :color="$project->color" size="sm">{{ strtoupper($project->name) }}</flux:badge>
                 </flux:table.cell>
 
                 <flux:table.cell class="whitespace-nowrap">{{ $project->created_at }}</flux:table.cell>
