@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->date('due_date');
-            $table->date('postponed_at')->nullable();
             $table->unsignedSmallInteger('postponed_times')->default(0);
             $table->unsignedSmallInteger('severity_points')->default(0);
             $table->boolean('completed')->default('false');
