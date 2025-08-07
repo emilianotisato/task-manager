@@ -16,6 +16,10 @@ class Project extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'enabled' => 'boolean',
+    ];
+
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);

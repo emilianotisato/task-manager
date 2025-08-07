@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('due_date');
             $table->unsignedSmallInteger('postponed_times')->default(0);
             $table->unsignedSmallInteger('severity_points')->default(0);
-            $table->boolean('completed')->default('false');
+            $table->boolean('completed')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

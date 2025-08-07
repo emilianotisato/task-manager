@@ -12,6 +12,8 @@ Route::middleware(['auth'])->group(function () {
 
     Volt::route('projects', 'projects.index')->name('projects.index');
     Volt::route('projects/create', 'projects.form')->name('projects.create');
+    
+    Volt::route('tasks/create', 'tasks.form')->name('tasks.create');
 
     Route::redirect('settings', 'settings/profile');
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');

@@ -11,8 +11,17 @@
         <!--         <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" /> -->
         <!--     </div> -->
         <!-- </div> -->
+        
+        @if (session('status'))
+            <flux:callout color="green" icon="check-circle">
+                {{ session('status') }}
+            </flux:callout>
+        @endif
+        
         <div class="relative h-full flex-1 overflow-hidden">
             <livewire:tasks.pending-tasks />
         </div>
     </div>
+    
+    <livewire:command-palette />
 </x-layouts.app>
