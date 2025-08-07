@@ -58,7 +58,7 @@ new class extends Component {
                 'description' => 'Add a new task to your list',
                 'icon' => 'plus',
                 'action' => 'createNewTask',
-                'shortcut' => 'Alt+N'
+                'shortcut' => 'Ctrl+K'
             ],
             [
                 'id' => 'search-snoozed',
@@ -66,7 +66,7 @@ new class extends Component {
                 'description' => 'Find snoozed tasks',
                 'icon' => 'clock',
                 'action' => 'searchSnoozed',
-                'shortcut' => 'Alt+S'
+                'shortcut' => ''
             ],
             [
                 'id' => 'apply-filters',
@@ -74,7 +74,7 @@ new class extends Component {
                 'description' => 'Filter tasks by criteria',
                 'icon' => 'funnel',
                 'action' => 'applyFilters',
-                'shortcut' => 'Alt+F'
+                'shortcut' => ''
             ],
             [
                 'id' => 'sort-priority',
@@ -82,7 +82,7 @@ new class extends Component {
                 'description' => 'Sort tasks by priority level',
                 'icon' => 'arrows-up-down',
                 'action' => 'sortByPriority',
-                'shortcut' => 'Alt+P'
+                'shortcut' => ''
             ]
         ];
         
@@ -138,44 +138,22 @@ new class extends Component {
     @endif
     
     <script>
+        // Global keyboard shortcuts
         document.addEventListener('keydown', function(e) {
             if ((e.ctrlKey || e.metaKey) && e.key === '/') {
                 e.preventDefault();
                 @this.call('open');
             }
+
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                @this.call('createNewTask');
+            }
             
             if (e.key === 'Escape') {
                 @this.call('close');
             }
-        });
-        
-        // Handle Alt shortcuts when command palette is open
-        document.addEventListener('keydown', function(e) {
-            const commandPalette = document.querySelector('[data-command-palette-open]');
-            const isOpen = commandPalette && commandPalette.getAttribute('data-command-palette-open') === 'true';
             
-            if (isOpen && e.altKey && !e.ctrlKey && !e.shiftKey) {
-                const key = e.key.toLowerCase();
-                if (['n', 's', 'f', 'p'].includes(key)) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    switch(key) {
-                        case 'n':
-                            @this.call('createNewTask');
-                            break;
-                        case 's':
-                            @this.call('searchSnoozed');
-                            break;
-                        case 'f':
-                            @this.call('applyFilters');
-                            break;
-                        case 'p':
-                            @this.call('sortByPriority');
-                            break;
-                    }
-                }
-            }
         });
         
         document.addEventListener('focus-search', function() {

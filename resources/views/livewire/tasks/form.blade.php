@@ -47,11 +47,6 @@ new class extends Component {
 
         return $this->redirect(route('dashboard'));
     }
-
-    public function cancel()
-    {
-        return $this->redirect(route('dashboard'));
-    }
         
 }; ?>
 
@@ -80,13 +75,12 @@ new class extends Component {
         />
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <flux:date-picker 
-            wire:model="due_date" 
-            label="Due Date"
-            :min="now()->format('Y-m-d')"
-            with-today
-            selectable-header
-        />
+                    <flux:input 
+                        type="date"
+                        wire:model="due_date" 
+                        label="Due Date"
+                        placeholder="YYYY-MM-DD"
+                    />
             
             <flux:select 
                 wire:model="project_id" 
@@ -116,9 +110,6 @@ new class extends Component {
         </flux:select>
 
         <div class="flex justify-end gap-3">
-            <flux:button variant="outline" type="button" wire:click="cancel">
-                Cancel
-            </flux:button>
             <flux:button type="submit">
                 Create Task
             </flux:button>
