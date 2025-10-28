@@ -3,27 +3,41 @@
 use Livewire\Volt\Component;
 
 new class extends Component {
+    public ?\App\Models\Task $task = null;
+
     #[\Livewire\Attributes\Validate('required|min:3')]
     public $title = '';
-    
+
     #[\Livewire\Attributes\Validate('required')]
     public $description = '';
-    
-    #[\Livewire\Attributes\Validate('required|date|after:today')]
+
+    #[\Livewire\Attributes\Validate('required|date')]
     public $due_date = '';
-    
+
     #[\Livewire\Attributes\Validate('required|exists:projects,id')]
     public $project_id = '';
-    
+
     #[\Livewire\Attributes\Validate('required|integer|min:1|max:5')]
     public $severity_points = 1;
-    
-    public function mount()
+
+    public function mount(\App\Models\Task $task)
     {
-        $this->due_date = now()->addDay()->format('Y-m-d');
+        $this->task = $task;
+
+        if($task) {
+                $this->title = $task->title;
+                $this->description = $task->description;
+                $this->due_date = $task->due_date->format('Y-m-d');
+                $this->project_id = $task->project_id;
+                $this->severity_points = $task->severity_points == 0 ? 1 : $task->severity_points;
+
+            } else {
+                $this->due_date = now()->addDay()->format('Y-m-d');
+            }
+            
         $this->dispatch('focus-first-input');
     }
-    
+
     #[\Livewire\Attributes\Computed]
     public function projects()
     {
@@ -34,56 +48,67 @@ new class extends Component {
     {
         $this->validate();
 
-        \App\Models\Task::create([
-            'title' => $this->title,
-            'description' => $this->description,
-            'due_date' => $this->due_date,
-            'project_id' => $this->project_id,
-            'severity_points' => $this->severity_points,
-            'completed' => false,
-        ]);
+        if($this->task->id) {
+            $this->task->update([
+                'title' => $this->title,
+                'description' => $this->description,
+                'due_date' => $this->due_date,
+                'project_id' => $this->project_id,
+                'severity_points' => $this->severity_points,
+                'completed' => false,
+            ]);
+        } else {
+            \App\Models\Task::create([
+                'title' => $this->title,
+                'description' => $this->description,
+                'due_date' => $this->due_date,
+                'project_id' => $this->project_id,
+                'severity_points' => $this->severity_points,
+                'completed' => false,
+            ]); 
+        }
 
-        session()->flash('status', 'Task created successfully.');
+        session()->flash('status', $this->task->id ? 'Task updated successfully.' : 'Task created successfully.');
 
         return $this->redirect(route('dashboard'));
     }
-        
+
 }; ?>
 
 <div>
     <div class="mb-6">
-        <flux:heading>Create New Task</flux:heading>
-        <flux:subheading>Add a new task to your list</flux:subheading>
+        <flux:heading>{{ $this->task->id ? 'Edit Task' : 'Create New Task' }}</flux:heading>
+        <flux:subheading>{{ $this->task->id ? 'Update your task' : 'Add a new task to your list' }}</flux:subheading>
     </div>
 
     <form wire:submit="save" class="space-y-6">
-        <flux:input 
-            wire:model="title" 
-            label="Task Title" 
+        <flux:input
+            wire:model="title"
+            label="Task Title"
             placeholder="Enter task title"
             :invalid="$errors->has('title')"
             :error="$errors->first('title')"
             id="task-title-input"
         />
-        
-        <flux:textarea 
-            wire:model="description" 
-            label="Description" 
+
+        <flux:textarea
+            wire:model="description"
+            label="Description"
             placeholder="Describe the task"
             :invalid="$errors->has('description')"
             :error="$errors->first('description')"
         />
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <flux:input 
+                    <flux:input
                         type="date"
-                        wire:model="due_date" 
+                        wire:model="due_date"
                         label="Due Date"
                         placeholder="YYYY-MM-DD"
                     />
-            
-            <flux:select 
-                wire:model="project_id" 
+
+            <flux:select
+                wire:model="project_id"
                 label="Project"
                 :invalid="$errors->has('project_id')"
                 :error="$errors->first('project_id')"
@@ -94,9 +119,9 @@ new class extends Component {
                 @endforeach
             </flux:select>
         </div>
-        
-        <flux:select 
-            wire:model="severity_points" 
+
+        <flux:select
+            wire:model="severity_points"
             label="Priority"
             :invalid="$errors->has('severity_points')"
             :error="$errors->first('severity_points')"
@@ -111,11 +136,11 @@ new class extends Component {
 
         <div class="flex justify-end gap-3">
             <flux:button type="submit">
-                Create Task
+                {{ $this->task->id ? 'Update Task' : 'Create Task' }}
             </flux:button>
         </div>
     </form>
-    
+
     <script>
         document.addEventListener('focus-first-input', function() {
             setTimeout(() => {
