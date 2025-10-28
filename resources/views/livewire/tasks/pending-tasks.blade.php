@@ -53,10 +53,18 @@
                         @endif
                     </div>
 
-                    <div class="mt-4 text-right">
+                    <div class="flex items-center gap-2">
+                    <div class="flex-1 text-left">
+                        <flux:button as="a" href="{{ route('tasks.edit', $task->id) }}" variant="ghost" icon="pencil">
+                            Edit
+                        </flux:button>
+                    </div>
+
+                    <div class="flex-1 text-right">
                         <flux:modal.close>
                             <flux:button variant="ghost">Close</flux:button>
                         </flux:modal.close>
+                    </div>
                     </div>
                 </div>
             </flux:modal>
