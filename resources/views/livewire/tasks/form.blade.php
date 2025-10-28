@@ -24,7 +24,7 @@ new class extends Component {
     {
         $this->task = $task;
 
-        if($task) {
+        if($task->id) {
                 $this->title = $task->title;
                 $this->description = $task->description;
                 $this->due_date = $task->due_date->format('Y-m-d');

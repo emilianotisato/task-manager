@@ -44,8 +44,7 @@ new class extends Component {
     public function sortByPriority()
     {
         $this->close();
-        // TODO: Implement priority sorting
-        session()->flash('status', 'Sorting by priority...');
+        $this->dispatch('sort-by-priority');
     }
     
     #[\Livewire\Attributes\Computed]

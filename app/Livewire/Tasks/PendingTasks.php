@@ -2,9 +2,9 @@
 
 namespace App\Livewire\Tasks;
 
-use Livewire\Component;
 use App\Models\Task;
 use Illuminate\Support\Carbon;
+use Livewire\Component;
 
 class PendingTasks extends Component
 {
@@ -12,6 +12,7 @@ class PendingTasks extends Component
 
     public $sortDirection = 'asc';
 
+    protected $listeners = ['sort-by-priority' => 'sortByPriority'];
 
     public function sort($column)
     {
@@ -59,8 +60,14 @@ class PendingTasks extends Component
 
         // If marked done, close modal as it will drop out of the pending list
         if ($task->completed) {
-            $this->dispatch('close-modal', 'task-detail-' . $taskId);
+            $this->dispatch('close-modal', 'task-detail-'.$taskId);
         }
+    }
+
+    public function sortByPriority(): void
+    {
+        $this->sortBy = 'severity_points';
+        $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
     }
 
     public function render()
